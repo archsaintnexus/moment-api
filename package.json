@@ -3,11 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "main": "server.ts",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npx tsc",
-    "start": "npx tsc & node build/server.js",
-    "dev": "nodemon server.ts"
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "dev": "tsc-watch --onSuccess \"node dist/server.js\""
   },
   "keywords": [],
   "author": "",
@@ -49,6 +50,7 @@
     "@types/uuid": "^10.0.0",
     "joi-to-typescript": "^4.13.0",
     "nodemon": "^3.1.0",
-    "prisma": "^7.4.2"
+    "prisma": "^7.4.2",
+    "tsc-watch": "^7.2.0"
   }
 }
