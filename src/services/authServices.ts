@@ -1,7 +1,5 @@
-import Prisma from "@prisma/client";
 import { prisma } from "@/config/prisma";
 import bcrypt from "bcrypt";
-import dotenv from "dotenv";
 import resend from "resend";
 import { RegisterDTO } from "@/validators/authValidator";
 import { ConflictException } from "@/exceptions/app-exceptions";
@@ -31,7 +29,16 @@ export class AuthService {
       },
     });
 
-    const OTP = Math.floor(Math.random() * 1000000);
+    const OTP = Math.floor(100000 + Math.random() * 900000);
+
+    // send OTP
+    const resendClient = new resend.Resend(process.env.MAIL_API_KEY!);
+    await resendClient.emails.send({
+      from: "software@archsaintnexus.com",
+      to: data.email,
+      subject: "Verify your email",
+      html: `<p>Your OTP for email verification is: <strong>${OTP}</strong></p>`,
+    });
 
     return {
       id: user.id,
