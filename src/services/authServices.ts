@@ -7,7 +7,12 @@ import { ConflictException } from "@/exceptions/app-exceptions";
 export class AuthService {
   async register(
     data: RegisterDTO,
-  ): Promise<{ id: string; email: string; role: string }> {
+  ): Promise<{
+    id: string;
+    email: string;
+    role: string;
+    phone: string | null;
+  }> {
     // Check if user with the same email already exists
     const existingUser = await prisma.user.findUnique({
       where: { email: data.email },
@@ -15,6 +20,17 @@ export class AuthService {
 
     if (existingUser) {
       throw new ConflictException("Email is already registered");
+    }
+
+    //  check if phone number is already registered
+    if (data.phone) {
+      const existingPhoneUser = await prisma.user.findUnique({
+        where: { phone: data.phone },
+      });
+
+      if (existingPhoneUser) {
+        throw new ConflictException("Phone number is already registered");
+      }
     }
 
     // Hash the password before saving
@@ -26,6 +42,7 @@ export class AuthService {
         email: data.email,
         password: hashedPassword,
         role: data.role,
+        phone: data.phone ?? null,
       },
     });
 
@@ -44,6 +61,7 @@ export class AuthService {
       id: user.id,
       email: user.email,
       role: user.role,
+      phone: user.phone,
     };
   }
 }
