@@ -170,4 +170,13 @@ export class AuthService {
       },
     });
   }
+
+  async logout(userId: string, refreshToken: string): Promise<void> {
+    await prisma.refreshToken.deleteMany({
+      where: {
+        userId,
+        token: refreshToken,
+      },
+    });
+  }
 }

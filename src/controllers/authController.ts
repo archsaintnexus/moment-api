@@ -41,4 +41,23 @@ export class AuthController extends LoggerBase {
       message: "OTP verified successfully",
     });
   }
+
+  async logout(req: Request, res: Response): Promise<void> {
+    const userId = req.user?.id;
+    const refreshToken = req.body.refreshToken;
+
+    if (!userId || !refreshToken) {
+      res.status(400).json({
+        success: false,
+        message: "User ID and refresh token are required for logout",
+      });
+      return;
+    }
+
+    await this.authService.logout(userId, refreshToken);
+    res.status(200).json({
+      success: true,
+      message: "Logout successful",
+    });
+  }
 }
