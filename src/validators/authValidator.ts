@@ -17,6 +17,13 @@ export const LoginSchema = z.object({
   refreshTokens: z.string().optional(),
 });
 
+export const VerifyOtpSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  otp: z.string().min(6, "OTP must be at least 6 characters long"),
+});
+
+export type VerifyOtpDTO = z.infer<typeof VerifyOtpSchema>;
+
 export type LoginDTO = z.infer<typeof LoginSchema>;
 
 export type RegisterDTO = z.infer<typeof RegisterSchema>;

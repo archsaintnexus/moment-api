@@ -16,6 +16,19 @@ export class AuthController extends LoggerBase {
         role: user.role,
         phone: user.phone,
       },
-    });
+      });
+    }
+  
+    async login(req: Request, res: Response): Promise<void> {
+        const { token, refreshToken, user } = await this.authService.login(req.body);
+        res.status(200).json({
+          success: true,
+          message: "Login successful",
+          data: {
+            token,
+            refreshToken,
+            user,
+          },
+        });
   }
 }
