@@ -27,21 +27,6 @@ class DatabaseService extends LoggerBase {
                 ? ['query', 'info', 'warn', 'error']
                 : ['error'],
         });
-
-        this.init();
-    }
-
-    /**
-     * Validates the driver adapter connection on startup.
-     */
-    private async init(): Promise<void> {
-        try {
-            await this.client.$connect();
-            this.log('Database connected successfully via PG Adapter');
-        } catch (err) {
-            this.error('Critical: Database connection failed', err);
-            process.exit(1);
-        }
     }
 }
 

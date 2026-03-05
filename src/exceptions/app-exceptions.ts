@@ -71,9 +71,9 @@ export class ConflictException extends HttpException {
  * Thrown for validation errors (e.g., Zod schema failures).
  */
 export class ValidationException extends HttpException {
-    public errors?: ZodError | Record<string, string[]> | undefined;
+    public errors?: ZodError | Record<string, string[]> | string[] | undefined;
 
-    constructor(message = 'Validation failed', errors?: ZodError | Record<string, string[]>) {
+    constructor(message = 'Validation failed', errors?: ZodError | Record<string, string[]> | string[]) {
         super(message, 422);
         this.errors = errors;
     }

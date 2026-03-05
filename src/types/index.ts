@@ -1,5 +1,4 @@
 import type { ZodError } from "zod";
-import { Request } from "express";
 
 /**
  * Global API Response Contract

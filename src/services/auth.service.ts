@@ -12,7 +12,7 @@ import {
 } from "@/exceptions/app-exceptions";
 import { generateRefreshToken, generateToken } from "@/utils/token";
 
-export class AuthService {
+class AuthService {
   async register(data: RegisterDTO): Promise<{
     id: string;
     email: string;
@@ -180,3 +180,5 @@ export class AuthService {
     });
   }
 }
+
+export const authService = new AuthService();
