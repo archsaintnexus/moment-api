@@ -46,11 +46,17 @@ class App {
         this.app.use(express.urlencoded({ extended: true }));
     }
 
+<<<<<<< Updated upstream
     /**
      * Mounts the application routes.
      */
     private initializeRoutes(): void {
         // const apiPrefix = ConfigService.api.prefix;
+=======
+    // Mount routes under API prefix
+    this.app.use(apiPrefix, routes);
+  }
+>>>>>>> Stashed changes
 
         // Health check for load balancers and David's peace of mind
         this.app.get('/health', (_req: Request, res: Response) => {

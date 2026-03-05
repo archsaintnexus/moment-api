@@ -1,4 +1,8 @@
+<<<<<<< Updated upstream
 import type { ZodError } from 'zod'
+=======
+import type { ZodError } from "zod";
+>>>>>>> Stashed changes
 
 /**
  * Global API Response Contract
