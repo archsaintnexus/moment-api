@@ -45,12 +45,16 @@ export class AuthService {
     });
 
     const OTP = Math.floor(100000 + Math.random() * 900000);
+    const OTP_EXPIRATION_TIME = 10 * 60 * 1000; // 10 minutes
     const hashedOTP = await bcrypt.hash(OTP.toString(), 12);
 
-    // Save the hashed OTP to the user's record
+    // Save the hashed OTP and its expiration time in the database
     await prisma.user.update({
       where: { id: user.id },
-      data: { otp: hashedOTP },
+      data: {
+        otp: hashedOTP,
+        otpExpiration: new Date(Date.now() + OTP_EXPIRATION_TIME),
+      },
     });
 
     // send OTP

@@ -25,6 +25,7 @@ model User {
   phone      String?  @unique
   password   String
   otp        String?  @map("otp")
+  otpExpiration DateTime? @map("otp_expiration")
   role       Role     @default(CUSTOMER)
   isVerified Boolean  @default(false) @map("is_verified")
   createdAt  DateTime @default(now()) @map("created_at")
