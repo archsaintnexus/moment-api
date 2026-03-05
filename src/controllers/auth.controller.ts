@@ -51,12 +51,6 @@ class AuthController extends LoggerBase {
       });
       return;
     }
-
-    await authService.logout(userId, refreshToken);
-    res.status(200).json({
-      success: true,
-      message: "Logout successful",
-    });
   };
 }
 
