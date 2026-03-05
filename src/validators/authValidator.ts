@@ -9,4 +9,11 @@ export const RegisterSchema = z.object({
   phone: z.string().optional(),
 });
 
+export const LoginSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(6, "Password must be at least 6 characters long"),
+});
+
+export type LoginDTO = z.infer<typeof LoginSchema>;
+
 export type RegisterDTO = z.infer<typeof RegisterSchema>;

@@ -1,8 +1,12 @@
 import { prisma } from "@/config/prisma";
 import bcrypt from "bcrypt";
 import resend from "resend";
-import { RegisterDTO } from "@/validators/authValidator";
-import { ConflictException } from "@/exceptions/app-exceptions";
+import { LoginDTO, RegisterDTO } from "@/validators/authValidator";
+import {
+  ConflictException,
+  UnauthorizedException,
+} from "@/exceptions/app-exceptions";
+import { generateRefreshToken, generateToken } from "@/utils/token";
 
 export class AuthService {
   async register(data: RegisterDTO): Promise<{
@@ -71,6 +75,59 @@ export class AuthService {
       email: user.email,
       role: user.role,
       phone: user.phone,
+    };
+  }
+
+  async login(data: LoginDTO): Promise<{
+    token: string;
+    refreshToken: string;
+    user: {
+      id: string;
+      email: string;
+      role: string;
+      phone: string | null;
+    };
+  }> {
+    // check if user with the email exists
+    const user = await prisma.user.findUnique({
+      where: { email: data.email },
+    });
+
+    if (!user) {
+      throw new UnauthorizedException("Invalid email or password");
+    }
+
+    if (!user.isVerified) {
+      throw new UnauthorizedException("Email is not verified");
+    }
+
+    // check if password is correct
+    const isPasswordValid = await bcrypt.compare(data.password, user.password);
+    if (!isPasswordValid) {
+      throw new UnauthorizedException("Invalid email or password");
+    }
+
+    // generate tokens
+    const token = generateToken(user.id, user.role);
+    const refreshToken = generateRefreshToken(user.id, user.role);
+
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        token: token,
+        refreshToken: refreshToken,
+      },
+    });
+
+    return {
+      token,
+      refreshToken,
+      user: {
+        id: user.id,
+        email: user.email,
+        role: user.role,
+        phone: user.phone,
+      },
     };
   }
 }
