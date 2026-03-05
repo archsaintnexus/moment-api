@@ -5,7 +5,7 @@ import {
   LoginDTO,
   RegisterDTO,
   VerifyOtpDTO,
-} from "@/validators/authValidator";
+} from "@/validators/auth.validator";
 import {
   ConflictException,
   UnauthorizedException,

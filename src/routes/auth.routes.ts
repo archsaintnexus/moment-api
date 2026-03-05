@@ -1,9 +1,9 @@
 import { Router } from "express";
 import asyncHandler from "express-async-handler";
 import { authController } from "@/controllers/auth.controller";
-import { RegisterSchema } from "@/validators/authValidator";
-import { LoginSchema } from "@/validators/authValidator";
-import { VerifyOtpSchema } from "@/validators/authValidator";
+import { RegisterSchema } from "@/validators/auth.validator";
+import { LoginSchema } from "@/validators/auth.validator";
+import { VerifyOtpSchema } from "@/validators/auth.validator";
 import { authMiddleware } from "@/middlewares/auth.middleware";
 import { validate } from "@/middlewares/validate.middleware";
 
