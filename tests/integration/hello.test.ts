@@ -1,7 +1,7 @@
 import request from 'supertest';
 import app from '../../src/app';
 
-describe('GET /api/health', () => {
+describe('GET /health', () => {
     it('should return 200 OK', async () => {
         const response = await request(app).get('/health');
 
