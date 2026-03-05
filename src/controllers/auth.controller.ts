@@ -1,8 +1,7 @@
 import { Request, Response } from "express";
 import { authService } from "@/services/auth.service";
-import { LoggerBase } from "@/utils/logger";
 
-class AuthController extends LoggerBase {
+class AuthController {
   register = async (req: Request, res: Response): Promise<void> => {
     const user = await authService.register(req.body);
     res.status(201).json({
