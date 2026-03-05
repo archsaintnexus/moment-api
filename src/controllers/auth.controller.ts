@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { AuthService } from "@/services/authServices";
+import { AuthService } from "@/services/auth.service";
 import { LoggerBase } from "@/utils/logger";
 
 export class AuthController extends LoggerBase {
