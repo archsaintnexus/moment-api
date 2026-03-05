@@ -4,6 +4,7 @@ import { AuthController } from "@/controllers/authController";
 import { RegisterSchema } from "@/validators/authValidator";
 import { LoginSchema } from "@/validators/authValidator";
 import { VerifyOtpSchema } from "@/validators/authValidator";
+import { authMiddleware } from "@/middlewares/auth.middleware";
 import { validate } from "@/middlewares/validate.middleware";
 
 const router = Router();
@@ -29,6 +30,7 @@ router.post(
 
 router.post(
   "/logout",
+  authMiddleware,
   asyncHandler(authController.logout.bind(authController)),
 );
 export default router;

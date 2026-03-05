@@ -19,11 +19,11 @@ export const authMiddleware = (
   }
   try {
     const decoded = jwt.verify(token, secret) as unknown as {
-      id: string;
+      userId: string;
       role: string;
     };
     req.user = {
-      id: decoded.id,
+      id: decoded.userId,
       role: decoded.role,
     };
     next();
