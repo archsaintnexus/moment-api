@@ -26,4 +26,9 @@ router.post(
   validate(VerifyOtpSchema),
   asyncHandler(authController.verifyOtp.bind(authController)),
 );
+
+router.post(
+  "/logout",
+  asyncHandler(authController.logout.bind(authController)),
+);
 export default router;
