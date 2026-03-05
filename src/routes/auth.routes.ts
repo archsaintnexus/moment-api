@@ -1,6 +1,6 @@
 import { Router } from "express";
 import asyncHandler from "express-async-handler";
-import { AuthController } from "@/controllers/authController";
+import { authController } from "@/controllers/auth.controller";
 import { RegisterSchema } from "@/validators/authValidator";
 import { LoginSchema } from "@/validators/authValidator";
 import { VerifyOtpSchema } from "@/validators/authValidator";
@@ -8,29 +8,24 @@ import { authMiddleware } from "@/middlewares/auth.middleware";
 import { validate } from "@/middlewares/validate.middleware";
 
 const router = Router();
-const authController = new AuthController();
 
 router.post(
   "/register",
   validate(RegisterSchema),
-  asyncHandler(authController.register.bind(authController)),
+  asyncHandler(authController.register),
 );
 
 router.post(
   "/login",
   validate(LoginSchema),
-  asyncHandler(authController.login.bind(authController)),
+  asyncHandler(authController.login),
 );
 
 router.post(
   "/verify-otp",
   validate(VerifyOtpSchema),
-  asyncHandler(authController.verifyOtp.bind(authController)),
+  asyncHandler(authController.verifyOtp),
 );
 
-router.post(
-  "/logout",
-  authMiddleware,
-  asyncHandler(authController.logout.bind(authController)),
-);
+router.post("/logout", authMiddleware, asyncHandler(authController.logout));
 export default router;

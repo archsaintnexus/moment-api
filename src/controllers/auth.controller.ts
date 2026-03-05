@@ -5,7 +5,7 @@ import { LoggerBase } from "@/utils/logger";
 export class AuthController extends LoggerBase {
   private authService = new AuthService();
 
-  async register(req: Request, res: Response): Promise<void> {
+  register = async (req: Request, res: Response): Promise<void> => {
     const user = await this.authService.register(req.body);
     res.status(201).json({
       success: true,
@@ -17,9 +17,9 @@ export class AuthController extends LoggerBase {
         phone: user.phone,
       },
     });
-  }
+  };
 
-  async login(req: Request, res: Response): Promise<void> {
+  login = async (req: Request, res: Response): Promise<void> => {
     const { token, refreshToken, user } = await this.authService.login(
       req.body,
     );
@@ -32,17 +32,17 @@ export class AuthController extends LoggerBase {
         user,
       },
     });
-  }
+  };
 
-  async verifyOtp(req: Request, res: Response): Promise<void> {
+  verifyOtp = async (req: Request, res: Response): Promise<void> => {
     await this.authService.verifyOtp(req.body);
     res.status(200).json({
       success: true,
       message: "OTP verified successfully",
     });
-  }
+  };
 
-  async logout(req: Request, res: Response): Promise<void> {
+  logout = async (req: Request, res: Response): Promise<void> => {
     const userId = req.user?.id;
     const refreshToken = req.body.refreshToken;
 
@@ -59,5 +59,7 @@ export class AuthController extends LoggerBase {
       success: true,
       message: "Logout successful",
     });
-  }
+  };
 }
+
+export const authController = new AuthController();
