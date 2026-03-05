@@ -111,17 +111,11 @@ export class AuthService {
     const token = generateToken(user.id, user.role);
     const refreshToken = generateRefreshToken(user.id, user.role);
 
-    // Save access token on user and create a RefreshToken record
-    await prisma.user.update({
-      where: { id: user.id },
-      data: { token },
-    });
-
     await prisma.refreshToken.create({
       data: {
         token: refreshToken,
         userId: user.id,
-        expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days
+        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
       },
     });
 
