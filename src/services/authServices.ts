@@ -45,6 +45,13 @@ export class AuthService {
     });
 
     const OTP = Math.floor(100000 + Math.random() * 900000);
+    const hashedOTP = await bcrypt.hash(OTP.toString(), 12);
+
+    // Save the hashed OTP to the user's record
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { otp: hashedOTP },
+    });
 
     // send OTP
     const resendClient = new resend.Resend(process.env.MAIL_API_KEY!);
