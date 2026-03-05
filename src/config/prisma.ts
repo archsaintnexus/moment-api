@@ -5,6 +5,7 @@ import { ConfigService } from './env';
 import { PrismaClient } from '@/generated/prisma/client';
 
 /**
+ * Manages the Prisma 7.3.0 client using a Driver Adapter.
  * Manages the Prisma client using a Driver Adapter.
  * Bridges the gap between the 'pg' pool and Prisma.
  */

@@ -81,6 +81,7 @@ export abstract class LoggerBase {
 
     /**
      * Logs an informational message.
+     * * @param {string} message - The primary message to log.
      * @param {string} message - The primary message to log.
      * @param {Record<string, unknown>} [meta] - Optional metadata to include in the log entry.
      */
@@ -90,6 +91,7 @@ export abstract class LoggerBase {
 
     /**
      * Logs an error message and associated error object or stack trace.
+     * * @param {string} message - The error description.
      * @param {string} message - The error description.
      * @param {Error | unknown} [error] - The error object or supplementary details.
      */
@@ -99,6 +101,7 @@ export abstract class LoggerBase {
 
     /**
      * Logs a warning message.
+     * * @param {string} message - The warning description.
      * @param {string} message - The warning description.
      * @param {Record<string, unknown>} [meta] - Optional metadata or context.
      */
@@ -108,6 +111,7 @@ export abstract class LoggerBase {
 
     /**
      * Logs a debug message, typically visible only in non-production environments.
+     * * @param {string} message - The debug details.
      * @param {string} message - The debug details.
      * @param {Record<string, unknown>} [meta] - Optional metadata.
      */
