@@ -1,7 +1,11 @@
 import { prisma } from "@/config/prisma";
 import bcrypt from "bcrypt";
 import resend from "resend";
-import { LoginDTO, RegisterDTO } from "@/validators/authValidator";
+import {
+  LoginDTO,
+  RegisterDTO,
+  VerifyOtpDTO,
+} from "@/validators/authValidator";
 import {
   ConflictException,
   UnauthorizedException,
@@ -129,5 +133,41 @@ export class AuthService {
         phone: user.phone,
       },
     };
+  }
+
+  async verifyOtp(data: VerifyOtpDTO): Promise<void> {
+    const user = await prisma.user.findUnique({
+      where: { email: data.email },
+    });
+
+    if (!user) {
+      throw new UnauthorizedException("Invalid email or OTP");
+    }
+
+    if (!user.otp || !user.otpExpiration) {
+      throw new UnauthorizedException(
+        "OTP not found. Please request a new one.",
+      );
+    }
+
+    if (new Date() > user.otpExpiration) {
+      throw new UnauthorizedException(
+        "OTP has expired. Please request a new one.",
+      );
+    }
+
+    const isOtpValid = await bcrypt.compare(data.otp, user.otp);
+    if (!isOtpValid) {
+      throw new UnauthorizedException("Invalid email or OTP");
+    }
+
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        isVerified: true,
+        otp: null,
+        otpExpiration: null,
+      },
+    });
   }
 }
