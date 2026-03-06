@@ -13,6 +13,7 @@ datasource db {
   provider = "postgresql"
 }
 
+// Enums for strict type safety
 enum Role {
   CUSTOMER
   CREATIVE
@@ -20,25 +21,30 @@ enum Role {
 }
 
 model User {
-  id         String   @id @default(uuid())
-  email      String   @unique
-  phone      String?  @unique
-  password   String
-  otp        String?
-  otpExpiration DateTime? @map("otp_expiration")
-  token     String?
-  role       Role     @default(CUSTOMER)
-  isVerified Boolean  @default(false) @map("is_verified")
-  createdAt  DateTime @default(now()) @map("created_at")
-  updatedAt  DateTime @updatedAt @map("updated_at")
-
-  refreshTokens RefreshToken[]
+  id              String           @id @default(uuid())
+  name            String
+  email           String           @unique
+  phone           String?          @unique
+  profileImageId  String?          @unique @map("profile_image_id")
+  password        String
+  otp             String?
+  otpExpiration   DateTime?        @map("otp_expiration")
+  token           String?
+  role            Role             @default(CUSTOMER)
+  isVerified      Boolean          @default(false) @map("is_verified")
+  createdAt       DateTime         @default(now()) @map("created_at")
+  updatedAt       DateTime         @updatedAt @map("updated_at")
+  // Relations
+  profileImage    Upload?          @relation("ProfilePicture", fields: [profileImageId], references: [id], onDelete: SetNull)
+  refreshTokens   RefreshToken[]
+  creativeProfile CreativeProfile?
+  uploads         Upload[]         @relation("UserUploads")
 
   @@map("users")
 }
 
 model RefreshToken {
-  id        String   @id @default(cuid())
+  id        String   @id @default(uuid())
   token     String   @unique
   userId    String   @map("user_id")
   expiresAt DateTime @map("expires_at")
@@ -48,4 +54,60 @@ model RefreshToken {
 
   @@index([userId])
   @@map("refresh_tokens")
+}
+
+model CreativeProfile {
+  id             String          @id @default(uuid())
+  userId         String          @unique @map("user_id")
+  coverImageId   String?         @unique @map("cover_image_id")
+  bio            String?         @db.Text
+  profession     String?
+  location       String?
+  isFeatured     Boolean         @default(false) @map("is_featured")
+  isVerified     Boolean         @default(false) @map("is_verified")
+  socialLinks    Json?           @map("social_links")
+  createdAt      DateTime        @default(now()) @map("created_at")
+  updatedAt      DateTime        @updatedAt @map("updated_at")
+  // Relations
+  user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  coverImage     Upload?         @relation("CoverImage", fields: [coverImageId], references: [id], onDelete: SetNull)
+  portfolioItems PortfolioItem[]
+
+  @@map("creative_profiles")
+}
+
+model PortfolioItem {
+  id                String          @id @default(uuid())
+  creativeProfileId String          @map("creative_profile_id")
+  uploadId          String          @unique @map("upload_id") // Links to the physical file
+  title             String?
+  description       String?         @db.Text
+  displayOrder      Int             @default(0) @map("display_order")
+  isFeatured        Boolean         @default(false) @map("is_featured")
+  createdAt         DateTime        @default(now()) @map("created_at")
+  updatedAt         DateTime        @updatedAt @map("updated_at")
+  // Relations
+  creativeProfile   CreativeProfile @relation(fields: [creativeProfileId], references: [id], onDelete: Cascade)
+  upload            Upload          @relation("PortfolioUpload", fields: [uploadId], references: [id], onDelete: Cascade)
+
+  @@map("portfolio_items")
+}
+
+model Upload {
+  id             String           @id @default(uuid())
+  url            String // Storage provider URL
+  publicId       String           @unique @map("public_id") // For Cloudinary/S3 deletion
+  mimeType       String           @map("mime_type")
+  fileSize       Int              @map("file_size")
+  userId         String           @map("user_id")
+  createdAt      DateTime         @default(now()) @map("created_at")
+  updatedAt      DateTime         @updatedAt @map("updated_at")
+  // Relations
+  user           User             @relation("UserUploads", fields: [userId], references: [id], onDelete: Cascade)
+  portfolioItem  PortfolioItem?   @relation("PortfolioUpload")
+  profilePicture User?            @relation("ProfilePicture")
+  profileCover   CreativeProfile? @relation("CoverImage")
+
+  @@index([userId])
+  @@map("uploads")
 }

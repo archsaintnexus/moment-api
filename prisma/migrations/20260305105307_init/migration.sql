@@ -1,18 +1,5 @@
-/*
-  Warnings:
-
-  - You are about to drop the `RefreshToken` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `User` table. If the table is not empty, all the data it contains will be lost.
-
-*/
--- DropForeignKey
-ALTER TABLE "RefreshToken" DROP CONSTRAINT "RefreshToken_userId_fkey";
-
--- DropTable
-DROP TABLE "RefreshToken";
-
--- DropTable
-DROP TABLE "User";
+-- CreateEnum
+CREATE TYPE "Role" AS ENUM ('CUSTOMER', 'CREATIVE', 'ADMIN');
 
 -- CreateTable
 CREATE TABLE "users" (
@@ -20,6 +7,9 @@ CREATE TABLE "users" (
     "email" TEXT NOT NULL,
     "phone" TEXT,
     "password" TEXT NOT NULL,
+    "otp" TEXT,
+    "otp_expiration" TIMESTAMP(3),
+    "token" TEXT,
     "role" "Role" NOT NULL DEFAULT 'CUSTOMER',
     "is_verified" BOOLEAN NOT NULL DEFAULT false,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,

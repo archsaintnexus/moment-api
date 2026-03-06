@@ -1,5 +1,4 @@
 import type { ZodError } from "zod";
-import { Request } from "express";
 
 /**
  * Global API Response Contract
@@ -14,6 +13,7 @@ export interface IApiResponse<T = unknown> {
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Express {
     interface Request {
       user?: {

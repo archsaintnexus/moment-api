@@ -23,9 +23,6 @@ class ErrorMiddleware extends LoggerBase {
       statusCode = error.statusCode;
       message = error.message;
       if ("errors" in error) errors = error.errors;
-    } else if (error.type === "entity.parse.failed") {
-      statusCode = 400;
-      message = "Invalid JSON in request body";
     }
 
     // Log the error using our standardized logger

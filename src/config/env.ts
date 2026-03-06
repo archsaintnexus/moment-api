@@ -24,7 +24,7 @@ export const ConfigService = {
     },
     api: {
         prefix: '/api/v1',
-        url: _env.APP_URL || `http://localhost:${_env.PORT}`,
+        url: _env.APP_URL,
     },
     cors: {
         origins: _env.FRONTEND_URL ? [_env.FRONTEND_URL] : ['http://localhost:3000'],
@@ -33,7 +33,7 @@ export const ConfigService = {
         url: _env.DATABASE_URL,
     },
     email: {
-        provider: _env.MAIL_PROVIDER || 'resend',
+        provider: _env.MAIL_PROVIDER,
         apiKey: _env.MAIL_API_KEY,
         name: _env.APP_NAME,
         fromAddress: 'noreply@' + _env.APP_NAME.toLowerCase().replace(' ', '-') + '.com',

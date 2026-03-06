@@ -66,7 +66,7 @@ class App {
     });
 
     // Mount routes under API prefix
-    this.app.use("/api/v1", routes);
+    this.app.use(apiPrefix, routes);
   }
 
   /**

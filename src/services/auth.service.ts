@@ -11,14 +11,10 @@ import {
   UnauthorizedException,
 } from "@/exceptions/app-exceptions";
 import { generateRefreshToken, generateToken } from "@/utils/token";
+import { User } from "@/generated/prisma/client";
 
-export class AuthService {
-  async register(data: RegisterDTO): Promise<{
-    id: string;
-    email: string;
-    role: string;
-    phone: string | null;
-  }> {
+class AuthService {
+  async register(data: RegisterDTO): Promise<Omit<User, "password" | "otp" | "otpExpiration" | "token">> {
     // Check if user with the same email already exists
     const existingUser = await prisma.user.findUnique({
       where: { email: data.email },
@@ -45,11 +41,18 @@ export class AuthService {
     // Create the user in the database
     const user = await prisma.user.create({
       data: {
+        name: data.name,
         email: data.email,
         password: hashedPassword,
         role: data.role,
         phone: data.phone ?? null,
       },
+      omit: {
+        password: true,
+        otp: true,
+        otpExpiration: true,
+        token: true
+      }
     });
 
     const OTP = Math.floor(100000 + Math.random() * 900000);
@@ -74,23 +77,13 @@ export class AuthService {
       html: `<p>Your OTP for email verification is: <strong>${OTP}</strong></p>`,
     });
 
-    return {
-      id: user.id,
-      email: user.email,
-      role: user.role,
-      phone: user.phone,
-    };
+    return user;
   }
 
   async login(data: LoginDTO): Promise<{
     token: string;
     refreshToken: string;
-    user: {
-      id: string;
-      email: string;
-      role: string;
-      phone: string | null;
-    };
+    user: Pick<User, "id" | "name" | "email" | "role" | "phone" | "isVerified">;
   }> {
     // check if user with the email exists
     const user = await prisma.user.findUnique({
@@ -128,10 +121,12 @@ export class AuthService {
       refreshToken,
       user: {
         id: user.id,
+        name: user.name,
         email: user.email,
         role: user.role,
         phone: user.phone,
-      },
+        isVerified: user.isVerified,
+      }
     };
   }
 
@@ -180,3 +175,5 @@ export class AuthService {
     });
   }
 }
+
+export const authService = new AuthService();
