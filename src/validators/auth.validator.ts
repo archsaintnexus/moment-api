@@ -6,15 +6,12 @@ export const RegisterSchema = z.object({
   email: z.email("Invalid email address"),
   password: z.string().min(6, "Password must be at least 6 characters long"),
   role: z.enum(Role).default(Role.CUSTOMER),
-  otp: z.string().optional(),
   phone: z.string().optional(),
 });
 
 export const LoginSchema = z.object({
   email: z.email("Invalid email address"),
   password: z.string().min(6, "Password must be at least 6 characters long"),
-  token: z.string().optional(),
-  refreshTokens: z.string().optional(),
 });
 
 export const VerifyOtpSchema = z.object({
