@@ -27,7 +27,7 @@ export const authMiddleware = (
       role: decoded.role,
     };
     next();
-  } catch (err) {
+  } catch (_err) {
     throw new UnauthorizedException();
   }
 };
