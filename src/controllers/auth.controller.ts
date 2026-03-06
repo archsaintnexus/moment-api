@@ -7,12 +7,7 @@ class AuthController {
     res.status(201).json({
       success: true,
       message: "User registered successfully",
-      data: {
-        id: user.id,
-        email: user.email,
-        role: user.role,
-        phone: user.phone,
-      },
+      data: user
     });
   };
 
