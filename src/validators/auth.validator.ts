@@ -19,8 +19,15 @@ export const VerifyOtpSchema = z.object({
   otp: z.string().min(6, "OTP must be at least 6 characters long"),
 });
 
+export const updateProfileSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters long").optional(),
+  phone: z.string().optional(),
+});
+
 export type VerifyOtpDTO = z.infer<typeof VerifyOtpSchema>;
 
 export type LoginDTO = z.infer<typeof LoginSchema>;
 
 export type RegisterDTO = z.infer<typeof RegisterSchema>;
+
+export type UpdateProfileDTO = z.infer<typeof updateProfileSchema>;
