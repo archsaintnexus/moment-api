@@ -21,24 +21,24 @@ enum Role {
 }
 
 model User {
-  id               String           @id @default(uuid())
-  name             String
-  email            String           @unique
-  phone            String?          @unique
-  profileImageId   String?          @unique @map("profile_image_id")
-  password         String
-  otp              String?
-  otpExpiration    DateTime?        @map("otp_expiration")
-  token            String?
-  role             Role             @default(CUSTOMER)
-  isVerified       Boolean          @default(false) @map("is_verified")
-  createdAt        DateTime         @default(now()) @map("created_at")
-  updatedAt        DateTime         @updatedAt @map("updated_at")
+  id              String           @id @default(uuid())
+  name            String
+  email           String           @unique
+  phone           String?          @unique
+  profileImageId  String?          @unique @map("profile_image_id")
+  password        String
+  otp             String?
+  otpExpiration   DateTime?        @map("otp_expiration")
+  token           String?
+  role            Role             @default(CUSTOMER)
+  isVerified      Boolean          @default(false) @map("is_verified")
+  createdAt       DateTime         @default(now()) @map("created_at")
+  updatedAt       DateTime         @updatedAt @map("updated_at")
   // Relations
-  profileImage     Upload?          @relation("ProfilePicture", fields: [profileImageId], references: [id], onDelete: SetNull)
-  refreshTokens    RefreshToken[]
-  creativeProfiles CreativeProfile?
-  uploads          Upload[]         @relation("UserUploads")
+  profileImage    Upload?          @relation("ProfilePicture", fields: [profileImageId], references: [id], onDelete: SetNull)
+  refreshTokens   RefreshToken[]
+  creativeProfile CreativeProfile?
+  uploads         Upload[]         @relation("UserUploads")
 
   @@map("users")
 }
@@ -65,7 +65,7 @@ model CreativeProfile {
   location       String?
   isFeatured     Boolean         @default(false) @map("is_featured")
   isVerified     Boolean         @default(false) @map("is_verified")
-  socialLinks    Json?           @default("{}") @map("social_links")
+  socialLinks    Json?           @map("social_links")
   createdAt      DateTime        @default(now()) @map("created_at")
   updatedAt      DateTime        @updatedAt @map("updated_at")
   // Relations
@@ -83,7 +83,7 @@ model PortfolioItem {
   title             String?
   description       String?         @db.Text
   displayOrder      Int             @default(0) @map("display_order")
-  isFeatured        Boolean         @default(false) @map("is_portfolio_featured")
+  isFeatured        Boolean         @default(false) @map("is_featured")
   createdAt         DateTime        @default(now()) @map("created_at")
   updatedAt         DateTime        @updatedAt @map("updated_at")
   // Relations
@@ -96,7 +96,7 @@ model PortfolioItem {
 model Upload {
   id             String           @id @default(uuid())
   url            String // Storage provider URL
-  publicId       String           @map("public_id") // For Cloudinary/S3 deletion
+  publicId       String           @unique @map("public_id") // For Cloudinary/S3 deletion
   mimeType       String           @map("mime_type")
   fileSize       Int              @map("file_size")
   userId         String           @map("user_id")

@@ -14,7 +14,7 @@ import { generateRefreshToken, generateToken } from "@/utils/token";
 import { User } from "@/generated/prisma/client";
 
 class AuthService {
-  async register(data: RegisterDTO) {
+  async register(data: RegisterDTO): Promise<Omit<User, "password" | "otp" | "otpExpiration" | "token">> {
     // Check if user with the same email already exists
     const existingUser = await prisma.user.findUnique({
       where: { email: data.email },
