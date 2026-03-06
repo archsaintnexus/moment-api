@@ -14,6 +14,16 @@ class UserController extends LoggerBase {
       data: user,
     });
   };
+
+  updateMe = async (req: Request, res: Response): Promise<void> => {
+    const userId = req.user!.id;
+    const updatedUser = await this.userService.updateMe(userId, req.body);
+    res.status(200).json({
+      success: true,
+      message: "User profile updated successfully",
+      data: updatedUser,
+    });
+  };
 }
 
 export const userController = new UserController();
