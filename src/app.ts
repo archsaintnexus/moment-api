@@ -10,6 +10,8 @@ import { apiLimiter } from "./middlewares/rate-limiter.middleware";
 import { globalErrorHandler } from "./middlewares/error.middleware";
 import { notFoundHandler } from "./middlewares/not-found.middleware";
 import routes from "./routes";
+import swaggerUi from "swagger-ui-express";
+import { swaggerSpec } from "./config/swagger";
 
 /**
  * Application class to initialize the Express engine.
@@ -67,6 +69,12 @@ class App {
 
     // Mount routes under API prefix
     this.app.use(apiPrefix, routes);
+    // Swagger UI for API documentation
+    this.app.use(
+      `${apiPrefix}/docs`,
+      swaggerUi.serve,
+      swaggerUi.setup(swaggerSpec),
+    );
   }
 
   /**
