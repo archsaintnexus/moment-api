@@ -1,7 +1,7 @@
 import { prisma } from "@/config/prisma";
 import { NotFoundException } from "@/exceptions/app-exceptions";
 import { LoggerBase } from "@/utils/logger";
-import { UpdateProfileDTO } from "@/validators/auth.validator";
+import { UpdateProfileDTO } from "@/validators/user.validator";
 
 export class UserService extends LoggerBase {
   getMe = async (userId: string) => {
